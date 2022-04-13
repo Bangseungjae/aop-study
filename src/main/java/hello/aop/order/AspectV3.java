@@ -1,4 +1,4 @@
-package hello.aop.order.aop;
+package hello.aop.order;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -38,6 +38,21 @@ public class AspectV3 {
             throw e;
         }finally {
             log.info("[리소스 릴리즈]", joinPoint.getSignature());
+        }
+    }
+
+    @Slf4j
+    @Aspect
+    public static class AspectV2 {
+
+        //hello.aop.order 패키지와 하위 패키지
+        @Pointcut("execution(* hello.aop.order..*(..))")
+        private void allOrder(){} //pointcut signature
+
+        @Around("allOrder()")
+        public Object doLog(ProceedingJoinPoint joinPoint) throws Throwable {
+            log.info("[log] {}", joinPoint.getSignature()); //join point 시그니처
+            return joinPoint.proceed();
         }
     }
 }
